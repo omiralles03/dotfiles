@@ -14,7 +14,7 @@ unfocus = "hide"
 
 [scratchpads.spotify]
 animation = "fromTop"
-command = """flatpak run --command=sh com.spotify.Client -c 'eval "$(sed s#LD_PRELOAD=#LD_PRELOAD=$HOME/.local/share/spotify-adblock/spotify-adblock.so:#g /app/bin/spotify)"'"""
+command = "LD_PRELOAD=/usr/local/lib/spotify-adblock.so spotify"
 class = "Spotify"
 process_tracking = false
 lazy = true
@@ -24,7 +24,7 @@ match_by = "class"
 
 [scratchpads.password]
 animation = "fromTop"
-command = "flatpak run com.bitwarden.desktop"
+command = "bitwarden-desktop"
 class = "Bitwarden"
 lazy = true
 size = "50% 60%"

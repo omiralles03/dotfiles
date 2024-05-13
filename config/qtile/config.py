@@ -1,304 +1,498 @@
-#   qtile config by:
+    
+#       █████████     ███████    ███████████ █████ █████ ███████████ █████ █████       ██████████
+#      ███░░░░░███  ███░░░░░███ ░█░░░░░░███ ░░███ ░░███ ░█░░░███░░░█░░███ ░░███       ░░███░░░░░█
+#     ███     ░░░  ███     ░░███░     ███░   ░░███ ███  ░   ░███  ░  ░███  ░███        ░███  █ ░ 
+#    ░███         ░███      ░███     ███      ░░█████       ░███     ░███  ░███        ░██████   
+#    ░███         ░███      ░███    ███        ░░███        ░███     ░███  ░███        ░███░░█   
+#    ░░███     ███░░███     ███   ████     █    ░███        ░███     ░███  ░███      █ ░███ ░   █
+#     ░░█████████  ░░░███████░   ███████████    █████       █████    █████ ███████████ ██████████
+#      ░░░░░░░░░     ░░░░░░░    ░░░░░░░░░░░    ░░░░░       ░░░░░    ░░░░░ ░░░░░░░░░░░ ░░░░░░░░░░ 
 #
-#    ███╗   ███╗██╗  ██╗██████╗ ████████╗██╗
-#    ████╗ ████║██║  ██║██╔══██╗╚══██╔══╝██║
-#    ██╔████╔██║███████║██████╔╝   ██║   ██║
-#    ██║╚██╔╝██║╚════██║██╔══██╗   ██║   ██║
-#    ██║ ╚═╝ ██║     ██║██║  ██║   ██║   ██║
-#    ╚═╝     ╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝
-#
-#   github repo: https://github.com/M4rti21/dotfiles
+#                                                                                    - DARKKAL44
+  
 
-import os
-import subprocess
-import theme
-from typing import List
-from classes import ScrPad
-from widgets.caps import  Caps
-from widgets.clock import ToggleClock
-from libqtile import hook, widget
-from libqtile import bar
-from libqtile.layout.max import Max
-from libqtile.layout.columns import Columns
-from libqtile.layout.floating import Floating
-from libqtile.config import Click, Drag, Group, Key, Match, Screen, ScratchPad, DropDown
+
+from libqtile import bar, layout, widget, hook, qtile
+from libqtile.config import Click, Drag, Group, Key, Match, hook, Screen, KeyChord
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
+from libqtile.dgroups import simple_key_binder
+from time import sleep
 
-# VARIABLES !!!IMPORTANT!!!
-mod1 = "mod4"   # Super                                     # Primary mod key
-mod2 = "mod1"   # Alt                                       # Secondary mod key
-mod3 = "shift"                                              # Tertiary mod key
-mod4 = "control"                                            # Quaternary mod key
+mod = "mod4"
+terminal = "alacritty"
 
-primary_screen          = 1                                 # Primary screen (used for the systray)
-screen_count            = 1                                 # Number of screens
-workspace_per_screen    = 5                                 # Number of workspaces per screen
-default_layout          = "columns"                         # Default layout
-base_dir = os.path.expanduser("~/.config/qtile/scripts/")   # Scripts directory
-autostart_scripts = [
-        #"display_settings_x11.sh",
-        #"autostart.sh",
-        ]
-workspace_count = screen_count * workspace_per_screen       # DO NOT MODIFY!!!
+# █▄▀ █▀▀ █▄█ █▄▄ █ █▄░█ █▀▄ █▀
+# █░█ ██▄ ░█░ █▄█ █ █░▀█ █▄▀ ▄█
 
 
-# PROGRAMS
-terminal    = guess_terminal("alacritty") or "xterm"
-runner      = "rofi -show drun -show-icons"
-ss_select   = "flameshot gui"
-ss_full     = "flameshot full"
-
-# SCRATCHPADS 
-sps: List[ScrPad] =[
-        # volume control
-        ScrPad(
-            name = "pavucontrol",
-            key = "v",
-            is_flatpak = False,
-            flatpak = "",
-            ),
-        # music player
-        ScrPad(
-            name = "spotify",
-            key = "m",
-            is_flatpak = True,
-            flatpak = "flatpak run com.spotify.Client",
-            ),
-        # task manager
-        ScrPad(
-            name = terminal + " -e btop",
-            key = "b",
-            is_flatpak = False,
-            flatpak = "",
-            ),
-        # network manager
-        ScrPad(
-            name = terminal + " -e nmtui",
-            key = "n",
-            is_flatpak = False,
-            flatpak = "",
-            ),
-        # password manager
-        ScrPad(
-            name = "bitwarden",
-            key = "p",
-            is_flatpak = True,
-            flatpak = "flatpak run com.bitwarden.desktop",
-            ),
-        ]
-
-# QTILE CONFIG
-dgroups_key_binder = None                   # (None | "M") 
-dgroups_app_rules = []                      # (List of rules)
-auto_fullscreen = True                      # (True | False)
-bring_front_click = "floating_only"         # (True | False | "floating_only")
-cursor_warp = False                         # (True | False)
-floats_kept_above = True                    # (True | False)
-follow_mouse_focus = False                  # (True | False)
-focus_on_window_activation = "smart"        # ("urgent" | "focus" | "smart" | "never")
-reconfigure_screens = True                  # (True | False)
-auto_minimize = False                       # (True | False)
-wl_input_rules = None                       # (None | List of rules)
-wmname = "LG3D"                             # Just use LG3D because it makes Java apps work :/
-
-# QTILE ARRAYS (DO NOT MODIFY)
-keys    = []
-mouse   = []
-groups  = []
-screens = []
-layouts = []
-
-# KEYBINDINGS
-keys.extend([
-        # Qtile controls
-        Key([mod1, mod4], "r", lazy.reload_config()),                                   # Reload the config
-        Key([mod1, mod4], "q", lazy.shutdown()),                                        # Shutdown Qtile
-        Key([mod1], "Tab", lazy.next_layout()),                                         # Toggle between layouts
-        Key([mod2], "Tab", lazy.group.next_window(), lazy.window.bring_to_front()),     # Move window focus to other window
-        # Switch between windows
-        Key([mod1], "h", lazy.layout.left()),                   # Move focus to left
-        Key([mod1], "l", lazy.layout.right()),                  # Move focus to right
-        Key([mod1], "j", lazy.layout.down()),                   # Move focus down
-        Key([mod1], "k", lazy.layout.up()),                                                                                                                                                                                                                                                              # Move focus up
-        # Move windows
-        Key([mod1, mod3], "h", lazy.layout.shuffle_left()),     # Move window to the left
-        Key([mod1, mod3], "l", lazy.layout.shuffle_right()),    # Move window to the right
-        Key([mod1, mod3], "j", lazy.layout.shuffle_down()),     # Move window down
-        Key([mod1, mod3], "k", lazy.layout.shuffle_up()),       # Move window up
-        # Resize window
-        Key([mod1, mod4], "h", lazy.layout.grow_left()),        # Grow window to the left
-        Key([mod1, mod4], "l", lazy.layout.grow_right()),       # Grow window to the right
-        Key([mod1, mod4], "j", lazy.layout.grow_down()),        # Grow window down
-        Key([mod1, mod4], "k", lazy.layout.grow_up()),          # Grow window up
-        # Window controls
-        Key([mod1], "w", lazy.window.kill()),                   # Kill focused window
-        Key([mod1], "f", lazy.window.toggle_fullscreen()),      # Toggle fullscreen on the focused window
-        Key([mod1], "t", lazy.window.toggle_floating()),        # Toggle floating on the focused window
-        # Run programs
-        Key([mod1], "r", lazy.spawn(runner)),                   # Rofi prompt
-        Key([mod1], "Return", lazy.spawn(terminal)),            # Launch terminal
-        Key([mod1, mod3], "s", lazy.spawn(ss_select)),          # Take a screenshot
-        Key([mod1, mod4], "s", lazy.spawn(ss_full)),            # Take a screenshot
-        # Extras
-        Key([mod1], "space", lazy.widget["keyboardlayout"].next_keyboard()),    # Toggle between keyboard layouts
-        ])
-
-mouse.extend([
-        Drag([mod1], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position()),
-        Drag([mod1], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
-        Click([mod1], "Button1", lazy.window.bring_to_front()),
-        ])
-
-# SCRATCHPADS
-drop_downs = []
-for sp in sps:
-    if sp.is_flatpak:
-        drop_downs.append(
-            DropDown(sp.key, sp.flatpak, match=Match(wm_class=sp.name), **theme.sp_size),
-            )
-    else:
-        drop_downs.append(
-            DropDown(sp.key, sp.name, **theme.sp_size),
-            )
-
-    keys.append(Key([mod1], sp.key, lazy.group['sp'].dropdown_toggle(sp.key)))
-        
-groups.append(ScratchPad('sp', drop_downs))
 
 
-# GROUPS
+keys = [
+
+#  D E F A U L T
+
+    Key([mod], "h", lazy.layout.left(), desc="Move focus to left"),
+    Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
+    Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
+    Key([mod], "k", lazy.layout.up(), desc="Move focus up"),
+    Key([mod], "space", lazy.layout.next(), desc="Move window focus to other window"),
+    Key([mod, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
+    Key([mod, "shift"], "l", lazy.layout.shuffle_right(), desc="Move window to the right"),
+    Key([mod, "shift"], "j", lazy.layout.shuffle_down(), desc="Move window down"),
+    Key([mod, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
+    Key([mod, "control"], "h", lazy.layout.grow_left(), desc="Grow window to the left"),
+    Key([mod, "control"], "l", lazy.layout.grow_right(), desc="Grow window to the right"),
+    Key([mod, "control"], "j", lazy.layout.grow_down(), desc="Grow window down"),
+    Key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
+    Key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes"),
+    Key([mod], "f", lazy.window.toggle_fullscreen()),
+    Key(
+        [mod, "shift"],
+        "Return",
+        lazy.layout.toggle_split(),
+        desc="Toggle between split and unsplit sides of stack",
+    ),
+    Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
+    Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
+    Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
+    Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
+    Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
+    Key([mod], "r", lazy.spawn("rofi -show drun -show-icons"), desc="Spawn a command using a prompt widget"),
+    # Key([mod], "p", lazy.spawn("sh -c ~/.config/rofi/scripts/power"), desc='powermenu'),
+    # Key([mod], "t", lazy.spawn("sh -c ~/.config/rofi/scripts/themes"), desc='theme_switcher'),
+    Key([mod], "t", lazy.window.toggle_floating(), desc='Toggle Floating on the window'),
+
+# C U S T O M
+
+    Key([mod], "up", lazy.spawn("pactl set-sink-volume 0 +5%"), desc='Volume Up'),
+    Key([mod], "down", lazy.spawn("pactl set-sink-volume 0 -5%"), desc='volume down'),
+    Key([mod, "shift"], "M", lazy.spawn("pulsemixer --toggle-mute"), desc='Volume Mute'),
+    #Key([mod], "XF86AudioPlay", lazy.spawn("playerctl play-pause"), desc='playerctl'),
+    #Key([mod], "XF86AudioPrev", lazy.spawn("playerctl previous"), desc='playerctl'),
+    #Key([mod], "XF86AudioNext", lazy.spawn("playerctl next"), desc='playerctl'),
+    Key([mod, "shift"], "B", lazy.spawn("brightnessctl s 10%+"), desc='brightness UP'),
+    Key([mod, "control"], "B", lazy.spawn("brightnessctl s 10%-"), desc='brightness Down'),
+    #Key([mod],"e", lazy.spawn("thunar"), desc='file manager'),
+	#Key([mod], "h", lazy.spawn("roficlip"), desc='clipboard'),
+    Key([mod, "shift"], "s", lazy.spawn("flameshot gui"), desc='Screenshot'),
+    Key([mod, "shift"], "o", lazy.spawn("picom"), desc='Enable Transparency'),
+    Key([mod, "control"], "o", lazy.spawn("killall picom"), desc='Disable Transparency'),
+]
+
+
+
+# █▀▀ █▀█ █▀█ █░█ █▀█ █▀
+# █▄█ █▀▄ █▄█ █▄█ █▀▀ ▄█
+
+groups = []
 # This function is a helper to keep each group on its own screen for a multi monitor setup
 def go_to_group(name):
     def f(qtile):
-        screen_index = (int(name) - 1) % screen_count
+        if int(name) < 4:
+            screen_index = 0
+        elif int(name) < 7:
+            screen_index = 1
+        else:
+            screen_index = 2
         qtile.cmd_to_screen(screen_index)
         qtile.groups_map[name].cmd_toscreen()
     return f
 
 # Create groups
-for name in map(str, range(1, workspace_count + 1)):
+for name in map(str, range(1, 9 + 1)):
     # Create a group
     groups.append(Group(
         name=name,
-        layout=default_layout,
-        label=name
-    ))
+        layout="columns",
+        label=name, #"󰏃"
+        ))
     # Add keybindings for the group
     keys.extend([
-        Key([mod1], name, lazy.function(go_to_group(name))),
-        Key([mod1, 'shift'], name, lazy.window.togroup(name)),
-    ])
-
-layouts.extend([
-        Columns(**theme.borders),
-        Max(**theme.borders),
+        Key([mod], name, lazy.function(go_to_group(name))),
+        Key([mod, 'shift'], name, lazy.window.togroup(name)),
         ])
+#groups = [Group(f"{i+1}", label="󰏃") for i in range(8)]
+# Default Groups config for qtile cozytile
+#for i in groups:
+#    keys.extend(
+#            [
+#                Key(
+#                    [mod],
+#                    i.name,
+#                    lazy.group[i.name].toscreen(),
+#                    desc="Switch to group {}".format(i.name),
+#                    ),
+#                Key(
+#                    [mod, "shift"],
+#                    i.name,
+#                    lazy.window.togroup(i.name, switch_group=True),
+#                    desc="Switch to & move focused window to group {}".format(i.name),
+#                    ),
+#                ]
+#            )
+#
 
-# FLOATING WINDOW RULES "xprop"
-floating_layout = Floating(
-        float_rules=[
-            *Floating.default_float_rules,
-            Match(wm_class='confirm'),
-            Match(wm_class='dialog'),
-            Match(wm_class='download'),
-            Match(wm_class='error'),
-            Match(wm_class='file_progress'),
-            Match(wm_class='notification'),
-            Match(wm_class='splash'),
-            Match(wm_class='toolbar'),
-            ],
-        **theme.borders
-        )
 
-def get_bar(index):
-    systray = []
-    if index + 1 == primary_screen:
-        systray = [
-                widget.WidgetBox(
-                    widgets=[
-                        widget.TextBox(text="[", padding=0),
-                        widget.Systray(icon_size=16),
-                        widget.TextBox(text=" ]", padding=0),
-                    ],
-                text_closed="",
-                text_open="",
-                close_button_location='right',
-                )
-            ]
 
-    visible_groups = []
+# L A Y O U T S
 
-    for i in range(workspace_count):
-        if i % screen_count == index:
-            visible_groups.append(str(i + 1))
 
-    pannel = {
-            "size" : theme.panel_size,
-            "margin" : theme.panel_margin,
-            "background" : theme.colors["background"],
-            "widgets" : [
-                widget.CurrentLayoutIcon(
-                    scale=0.75,
-                    use_mask=True,
-                    foreground=theme.colors["foreground"],
-                    ),
+
+
+layouts = [
+    layout.Columns(border_focus="#9ccfd8",
+        border_normal="#31748f", 
+        border_width=1, 
+        margin=8,
+    ),
+
+    layout.Max(	border_focus='#9ccfd8',
+	    border_normal='#31748f',
+	    margin=10,
+	    border_width=0,
+    ),
+
+    #layout.Floating(	border_focus='#1F1D2E',
+	#    border_normal='#1F1D2E',
+	#    margin=10,
+	#    border_width=0,
+	#),
+    ## Try more layouts by unleashing below layouts
+   ##  layout.Stack(num_stacks=2),
+   ##  layout.Bsp(),
+    # layout.Matrix(	border_focus='#1F1D2E',
+	#    border_normal='#1F1D2E',
+	#    margin=10,
+	#    border_width=0,
+	#),
+    # layout.MonadTall(	border_focus='#1F1D2E',
+	#    border_normal='#1F1D2E',
+    #    margin=10,
+	#    border_width=0,
+	#),
+    #layout.MonadWide(	border_focus='#1F1D2E',
+	#    border_normal='#1F1D2E',
+	#    margin=10,
+	#    border_width=0,
+	#),
+   ##  layout.RatioTile(),
+    # layout.Tile(	border_focus='#1F1D2E',
+	#    border_normal='#1F1D2E',
+    #),
+   ##  layout.TreeTab(),
+   ##  layout.VerticalTile(),
+   ##  layout.Zoomy(),
+]
+
+
+
+widget_defaults = dict(
+    font="sans",
+    fontsize=12,
+    padding=3,
+)
+extension_defaults = [ widget_defaults.copy()
+        ]
+
+
+
+def search():
+    qtile.cmd_spawn("rofi -show drun")
+
+def power():
+    qtile.cmd_spawn("sh -c ~/.config/rofi/scripts/power")
+
+# █▄▄ ▄▀█ █▀█
+# █▄█ █▀█ █▀▄
+
+
+def getWidgets(showTray, monitor):
+    sysTray = []
+    if showTray:
+        sysTray = [
+                widget.Image(
+                    filename='~/.config/qtile/Assets/3.png',
+                ),
+                widget.Systray(
+                    background='#282738',
+                    fontsize=2,
+                ),
+                widget.TextBox(
+                    text=' ',
+                    background='#282738',
+                ),
+
+
+                widget.Image(
+                    filename='~/.config/qtile/Assets/6.png',
+                    background='#353446',
+                ),
+        ]
+    
+    if monitor == 1:
+        visible_groups = ['1', '2', '3']
+    elif monitor == 2:
+        visible_groups = ['4', '5', '6']
+    else:
+        visible_groups = ['7', '8', '9']
+    return  [
+				widget.Spacer(length=15,
+                    background='#282738',
+                ),
+
+
+                widget.Image(
+                    filename='~/.config/qtile/Assets/launch_Icon.png',
+                    margin=2,
+                    background='#282738',
+                    mouse_callbacks={"Button1":power},
+                ),
+
+
+                widget.Image(
+                    filename='~/.config/qtile/Assets/6.png',
+                ),
+
+
                 widget.GroupBox(
-                    font=theme.font_family,
-                    visible_groups=visible_groups,
-                    highlight_method="line",
-                    highlight_color=[theme.colors["background"], theme.colors["background"]],
-                    inactive=theme.colors["disabled"],
-                    this_screen_border=theme.colors["foreground"],
-                    this_current_screen_border=theme.colors["accent"],
-                    active=theme.colors["foreground"],
-                    other_current_screen_border=theme.colors["disabled"],
-                    other_screen_border=theme.colors["disabled"],
-                    scroll=False,
-                    borderwidth=2,
-                    padding=4,
-                    margin_y=4,
+                    fontsize=24,
+                    borderwidth=3,
+                    highlight_method='block',
+                    active='#91B1F0',
+                    block_highlight_text_color="#f678ff",
+                    highlight_color='#4B427E',
+                    inactive='#282738',
+                    foreground='#4B427E',
+                    background='#353446',
+                    this_current_screen_border='#353446',
+                    this_screen_border='#353446',
+                    other_current_screen_border='#353446',
+                    other_screen_border='#353446',
+                    urgent_border='#353446',
+                    rounded=True,
                     disable_drag=True,
-                    use_mouse_wheel=False,
-                    ),
-                widget.WindowName(format="{name}"),
-                *systray,
-                Caps(),
-                widget.KeyboardLayout(
-                    configured_keyboards=['us', 'es cat'],
-                    display_map={'us': 'ENG', 'es cat': 'CAT'},
-                    ),
+                 ),
+
+
+                widget.Spacer(
+                    length=8,
+                    background='#353446',
+                ),
+
+
+                widget.Image(
+                    filename='~/.config/qtile/Assets/1.png',
+                ),
+
+
+                widget.Image(
+                    filename='~/.config/qtile/Assets/layout.png',
+                    background="#353446"
+                ),
+
+
+                widget.CurrentLayout(
+                    background='#353446',
+                    foreground='#CAA9E0',
+                    fmt='{}',
+                    font="JetBrains Mono Bold",
+                    fontsize=13,
+                ),
+
+
+                widget.Image(
+                    filename='~/.config/qtile/Assets/5.png',
+                ),
+
+
+                widget.Image(
+                    filename='~/.config/qtile/Assets/search.png',
+                    margin=2,
+                    background='#282738',
+                    mouse_callbacks={"Button1": search},
+                ),
+
+                widget.TextBox(
+                    fmt='Search',
+                    background='#282738',
+                    font="JetBrains Mono Bold",
+                    fontsize=13,
+                    foreground='#CAA9E0',
+                    mouse_callbacks={"Button1": search},
+                ),
+
+
+                widget.Image(
+                    filename='~/.config/qtile/Assets/4.png',
+                ),
+
+
+                widget.WindowName(
+                    background = '#353446',
+                    format = "{name}",
+                    font='JetBrains Mono Bold',
+                    foreground='#CAA9E0',
+                    empty_group_string = 'Desktop',
+                    fontsize=13,
+
+                ),
+
+
+                *sysTray,
+                
                 widget.Volume(
-                    fmt=" {}",
-                    emoji=False,
-                    emoji_list=["󰸈", "󰕿", "󰖀", "󰕾"],
-                    mouse_callbacks={'Button1': lazy.group['sp'].dropdown_toggle("vol") } 
+                    font='JetBrainsMono Nerd Font',
+                    theme_path='~/.config/qtile/Assets/Volume/',
+                    emoji=True,
+                    fontsize=13,
+                    background='#353446',
+                ),
+
+
+                widget.Spacer(
+                    length=-5,
+                    background='#353446',
                     ),
-                ToggleClock(),
-                widget.QuickExit(
-                    default_text="",
-                    countdown_format="{}",
-                    countdown_start=4,
-                    ),
-                widget.Spacer(length=theme.widget_padding),
-                ],
-            }
-    return pannel
 
-for i in range(screen_count):
-    screens.append(
-        Screen(
-            bottom=bar.Bar(**get_bar(i)),
-            left=bar.Gap(theme.outter_gap),
-            right=bar.Gap(theme.outter_gap),
-            top=bar.Gap(theme.outter_gap),
-            )
-        )
 
-widget_defaults = theme.widget_defaults
+                widget.Volume(
+                    font='JetBrains Mono Bold',
+                    background='#353446',
+                    foreground='#CAA9E0',
+                    fontsize=13,
+                ),
 
-# AUTO START PROGRAMS
+
+                widget.Image(
+                    filename='~/.config/qtile/Assets/5.png',
+                    background='#353446',
+                ),
+
+
+                widget.Image(
+                    filename='~/.config/qtile/Assets/Misc/clock.png',
+                    background='#282738',
+                    margin_y=6,
+                    margin_x=5,
+                ),
+
+
+                widget.Clock(
+                    format='%I:%M %p',
+                    background='#282738',
+                    foreground='#CAA9E0',
+                    font="JetBrains Mono Bold",
+                    fontsize=13,
+                ),
+
+
+                widget.Spacer(
+                    length=18,
+                    background='#282738',
+                ),
+
+
+
+            ],
+screens = [
+
+    Screen(
+        top=bar.Bar( 
+            *getWidgets(True, 1),
+            30,
+            border_color = '#282738',
+            border_width = [0,0,0,0],
+            margin = [15,60,6,60],
+
+        ),
+    ),
+    Screen(
+        top=bar.Bar( 
+            *getWidgets(False, 2),
+            30,
+            border_color = '#282738',
+            border_width = [0,0,0,0],
+            margin = [15,60,6,60],
+
+        ),
+    ),
+    Screen(
+        top=bar.Bar( 
+            *getWidgets(False, 3),
+            30,
+            border_color = '#282738',
+            border_width = [0,0,0,0],
+            margin = [15,60,6,60],
+
+        ),
+    ),
+]
+
+
+
+# Drag floating layouts.
+mouse = [
+    Drag([mod], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position()),
+    Drag([mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
+    Click([mod], "Button2", lazy.window.bring_to_front()),
+]
+
+dgroups_key_binder = None
+dgroups_app_rules = []  # type: list
+follow_mouse_focus = True
+bring_front_click = False
+cursor_warp = False
+floating_layout = layout.Floating(
+	border_focus='#1F1D2E',
+	border_normal='#1F1D2E',
+	border_width=0,
+    float_rules=[
+        # Run the utility of `xprop` to see the wm class and name of an X client.
+        *layout.Floating.default_float_rules,
+        Match(wm_class="confirmreset"),  # gitk
+        Match(wm_class="makebranch"),  # gitk
+        Match(wm_class="maketag"),  # gitk
+        Match(wm_class="ssh-askpass"),  # ssh-askpass
+        Match(title="branchdialog"),  # gitk
+        Match(title="pinentry"),  # GPG key password entry
+    ]
+)
+
+
+
+
+from libqtile import hook
+# some other imports
+import os
+import subprocess
+# stuff
 @hook.subscribe.startup_once
-def autostart():
-    for script in autostart_scripts:
-        subprocess.Popen([base_dir + script]) 
+def autostart_once():
+    home = os.path.expanduser('~/.config/qtile/autostart_once.sh')
+    subprocess.call([home])
+
+auto_fullscreen = True
+focus_on_window_activation = "smart"
+reconfigure_screens = True
+
+# If things like steam games want to auto-minimize themselves when losing
+# focus, should we respect this or not?
+auto_minimize = True
+
+# When using the Wayland backend, this can be used to configure input devices.
+wl_input_rules = None
+
+# XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
+# string besides java UI toolkits; you can see several discussions on the
+# mailing lists, GitHub issues, and other WM documentation that suggest setting
+# this string if your java app doesn't work correctly. We may as well just lie
+# and say that we're a working one by default.
+#
+# We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
+# java that happens to be on java's whitelist.
+wmname = "LG3D"
+
+
+
+# E O F

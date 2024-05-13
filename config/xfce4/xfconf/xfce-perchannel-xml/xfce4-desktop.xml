@@ -4,20 +4,20 @@
   <property name="backdrop" type="empty">
     <property name="screen0" type="empty">
       <property name="monitor0" type="empty">
-        <property name="image-path" type="string" value="/usr/share/endeavouros/backgrounds/endeavouros-wallpaper.png"/>
-        <property name="last-image" type="string" value="/usr/share/endeavouros/backgrounds/endeavouros-wallpaper.png"/>
+        <property name="image-path" type="string" value="/home/omiralles/.config/variety/Downloaded/flickr_user_www_flickr_com_photos_peter_levi__user_id_93647178_N00_/7527941664_c6a7a076ac_o.jpg"/>
+        <property name="last-image" type="string" value="/home/omiralles/.config/variety/Downloaded/flickr_user_www_flickr_com_photos_peter_levi__user_id_93647178_N00_/7527941664_c6a7a076ac_o.jpg"/>
         <property name="last-single-image" type="string" value="/usr/share/endeavouros/backgrounds/endeavouros-wallpaper.png"/>
         <property name="image-style" type="int" value="5"/>
       </property>
       <property name="monitor1" type="empty">
-        <property name="image-path" type="string" value="/usr/share/endeavouros/backgrounds/endeavouros-wallpaper.png"/>
-        <property name="last-image" type="string" value="/usr/share/endeavouros/backgrounds/endeavouros-wallpaper.png"/>
+        <property name="image-path" type="string" value="/home/omiralles/.config/variety/Downloaded/flickr_user_www_flickr_com_photos_peter_levi__user_id_93647178_N00_/7527941664_c6a7a076ac_o.jpg"/>
+        <property name="last-image" type="string" value="/home/omiralles/.config/variety/Downloaded/flickr_user_www_flickr_com_photos_peter_levi__user_id_93647178_N00_/7527941664_c6a7a076ac_o.jpg"/>
         <property name="last-single-image" type="string" value="/usr/share/endeavouros/backgrounds/endeavouros-wallpaper.png"/>
         <property name="image-style" type="int" value="5"/>
       </property>
       <property name="monitor2" type="empty">
-        <property name="image-path" type="string" value="/usr/share/endeavouros/backgrounds/endeavouros-wallpaper.png"/>
-        <property name="last-image" type="string" value="/usr/share/endeavouros/backgrounds/endeavouros-wallpaper.png"/>
+        <property name="image-path" type="string" value="/home/omiralles/.config/variety/Downloaded/flickr_user_www_flickr_com_photos_peter_levi__user_id_93647178_N00_/7527941664_c6a7a076ac_o.jpg"/>
+        <property name="last-image" type="string" value="/home/omiralles/.config/variety/Downloaded/flickr_user_www_flickr_com_photos_peter_levi__user_id_93647178_N00_/7527941664_c6a7a076ac_o.jpg"/>
         <property name="last-single-image" type="string" value="/usr/share/endeavouros/backgrounds/endeavouros-wallpaper.png"/>
         <property name="image-style" type="int" value="5"/>
       </property>
@@ -25,22 +25,22 @@
         <property name="workspace0" type="empty">
           <property name="color-style" type="int" value="0"/>
           <property name="image-style" type="int" value="5"/>
-          <property name="last-image" type="string" value="/home/omiralles03/Downloads/dotfiles/wallpapers/856316.jpg"/>
+          <property name="last-image" type="string" value="/home/omiralles/.config/variety/Downloaded/flickr_user_www_flickr_com_photos_peter_levi__user_id_93647178_N00_/7527941664_c6a7a076ac_o.jpg"/>
         </property>
         <property name="workspace1" type="empty">
           <property name="color-style" type="int" value="0"/>
           <property name="image-style" type="int" value="5"/>
-          <property name="last-image" type="string" value="/usr/share/endeavouros/backgrounds/endeavouros-wallpaper.png"/>
+          <property name="last-image" type="string" value="/home/omiralles/.config/variety/Downloaded/flickr_user_www_flickr_com_photos_peter_levi__user_id_93647178_N00_/7527941664_c6a7a076ac_o.jpg"/>
         </property>
         <property name="workspace2" type="empty">
           <property name="color-style" type="int" value="0"/>
           <property name="image-style" type="int" value="5"/>
-          <property name="last-image" type="string" value="/usr/share/endeavouros/backgrounds/endeavouros-wallpaper.png"/>
+          <property name="last-image" type="string" value="/home/omiralles/.config/variety/Downloaded/flickr_user_www_flickr_com_photos_peter_levi__user_id_93647178_N00_/7527941664_c6a7a076ac_o.jpg"/>
         </property>
         <property name="workspace3" type="empty">
           <property name="color-style" type="int" value="0"/>
           <property name="image-style" type="int" value="5"/>
-          <property name="last-image" type="string" value="/usr/share/endeavouros/backgrounds/endeavouros-wallpaper.png"/>
+          <property name="last-image" type="string" value="/home/omiralles/.config/variety/Downloaded/flickr_user_www_flickr_com_photos_peter_levi__user_id_93647178_N00_/7527941664_c6a7a076ac_o.jpg"/>
         </property>
       </property>
     </property>

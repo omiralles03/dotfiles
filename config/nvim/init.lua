@@ -20,4 +20,7 @@ require("lazy").setup({
     change_detection = { notify = false }
 })
 
+-- Set BG transparency
+vim.cmd("highlight Normal ctermbg=None guibg=None")
+vim.cmd("highlight NormalFloat ctermbg=None guibg=None")
 require("after");
